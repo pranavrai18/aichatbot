@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Literature Companion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f5e6d3;
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            margin: 0;
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #8b4513;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            color: #f5e6d3;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #f5e6d3;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1em;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: #d4b595;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px);
+        }
+
+        .chat-container {
+            background: #fff9f0;
+            width: 60%;
+            height: 80vh;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #d4b595;
+            position: relative;
+        }
+
+        .chat-header {
+            background-color: #8b4513;
+            color: #f5e6d3;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+            border-bottom: 2px solid #d4b595;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        #chatbox {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fff9f0;
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+        }
+
+        .bot-message, .user-message {
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 70%;
+            display: flex;
+            align-items: center;
+            font-size: 1.05em;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+        }
+
+        .bot-message {
+            background: #e8d5c4;
+            align-self: flex-start;
+            border-left: 3px solid #8b4513;
+        }
+
+        .user-message {
+            background: #d4b595;
+            align-self: flex-end;
+            color: #2c1810;
+            border-right: 3px solid #8b4513;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            font-style: italic;
+            color: #555;
+            padding: 10px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 15px;
+            border-top: 2px solid #d4b595;
+            background: #fff9f0;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d4b595;
+            border-radius: 4px;
+            font-size: 1em;
+            outline: none;
+            background-color: #fff9f0;
+            font-family: 'Lora', serif;
+            color: #2c1810;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #8b4513;
+            color: #f5e6d3;
+            font-size: 1em;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #6b3410;
+        }
+        footer {
+            position: fixed;
+            bottom: 1px;
+            width: 100%;
+            background-color: #8b4513;
+            color: #f5e6d3;
+            text-align: center;
+            padding: 10px;
+            padding-top: 1px;
+            font-size: 0.9em;
+            height: 35px;
+            font-family: 'Playfair Display', serif;
+            border-top: 1px solid #d4b595;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="#" class="nav-brand">
+            <i class="fas fa-book-open"></i>
+            Literary AI ChatBot
+        </a>
+    </nav>
+    <div class="main-container">
+        <div class="chat-container">
+        <div class="chat-header">📚 AI Literature Companion</div>
+        <div id="chatbox">
+            <div class="bot-message">
+                <img src="https://cdn-icons-png.flaticon.com/128/702/702797.png" class="message-avatar" alt="Avatar">
+                Hello! I'm here to help you out. How can I help you today?
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="userInput" placeholder="Type your message here...">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+    </div>
+    <footer>
+        <p>© AI Literature Companion. Developed By - <strong>Pranav Rai</strong></p>
+    </footer>
+
+    <script>
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value.trim();
+            if (!userInput) return;
+
+            appendMessage(userInput, 'user');
+            document.getElementById('userInput').value = '';
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.textContent = 'Typing...';
+            document.getElementById('chatbox').appendChild(typingIndicator);
+            typingIndicator.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userInput })
+                });
+                
+                const result = await response.json();
+                document.getElementById('chatbox').removeChild(typingIndicator);
+                appendMessage(result.reply, 'bot');
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('chatbox').removeChild(typingIndicator);
+                appendMessage("I'm having trouble responding right now. 🛠️", 'bot');
+            }
+        }
+
+        function appendMessage(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.className = sender === 'bot' ? 'bot-message' : 'user-message';
+            
+            if (sender === 'bot') {
+                messageElement.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/128/702/702797.png" class="message-avatar" alt="Avatar"> ${message}`;
+            } else {
+                messageElement.textContent = message;
+            }
+            
+            document.getElementById('chatbox').appendChild(messageElement);
+            messageElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
